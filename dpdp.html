@@ -1,0 +1,502 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>DPDP Act 2023 Compliance Readiness</title>
+    <style>
+        /* Import a clean modern font similar to the reference */
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap');
+
+        body {
+            margin: 0;
+            padding: 0;
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-family: 'Inter', system-ui, -apple-system, sans-serif;
+            /* Deep, professional blue gradient inspired by the reference */
+            background: linear-gradient(135deg, #104cba 0%, #052663 100%);
+            color: #ffffff;
+            box-sizing: border-box;
+        }
+
+        /* --- INTRO SCREEN (Full Screen Centered) --- */
+        #intro-area {
+            text-align: center;
+            max-width: 800px;
+            padding: 40px 20px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            animation: fadeIn 0.8s ease-out;
+        }
+
+        .pre-title {
+            font-size: 12px;
+            letter-spacing: 2px;
+            text-transform: uppercase;
+            color: #8cb4ff;
+            margin-bottom: 20px;
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+
+        .pre-title::before, .pre-title::after {
+            content: "";
+            height: 1px;
+            width: 30px;
+            background-color: #8cb4ff;
+        }
+
+        #intro-area h1 {
+            font-size: 56px;
+            font-weight: 700;
+            line-height: 1.1;
+            margin: 0 0 20px 0;
+            color: #ffffff;
+        }
+
+        #intro-area h1 span {
+            color: #4bd5ff; /* Soft cyan accent */
+        }
+
+        .subtitle {
+            font-size: 18px;
+            line-height: 1.6;
+            color: #d0e0ff;
+            margin-bottom: 30px;
+            max-width: 650px;
+        }
+
+        .features {
+            display: flex;
+            gap: 30px;
+            margin-bottom: 40px;
+            font-size: 15px;
+            color: #a1c2ff;
+            font-weight: 600;
+        }
+
+        .primary-btn {
+            background-color: #ffffff;
+            color: #0a42a0;
+            padding: 16px 36px;
+            border-radius: 8px;
+            font-weight: 600;
+            font-size: 18px;
+            border: none;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            box-shadow: 0 10px 20px rgba(0,0,0,0.15);
+        }
+
+        .primary-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 15px 25px rgba(0,0,0,0.2);
+            background-color: #f8fafc;
+        }
+
+        /* --- QUIZ & RESULT CONTAINER --- */
+        #main-card {
+            display: none; /* Hidden initially */
+            background: #ffffff;
+            color: #1e293b;
+            padding: 40px;
+            border-radius: 16px;
+            box-shadow: 0 25px 50px -12px rgba(0,0,0,0.3);
+            max-width: 600px;
+            width: 90%;
+            margin: 20px 0;
+            animation: slideUp 0.5s ease-out;
+        }
+
+        /* Progress Bar */
+        .progress-container {
+            width: 100%;
+            background-color: #e2e8f0;
+            border-radius: 10px;
+            margin-bottom: 30px;
+            overflow: hidden;
+            height: 6px;
+        }
+        
+        .progress-bar {
+            height: 100%;
+            background-color: #0ea5e9;
+            width: 0%;
+            transition: width 0.4s ease;
+        }
+
+        /* Questions */
+        .question-box {
+            font-size: 20px;
+            font-weight: 700;
+            margin-bottom: 30px;
+            color: #0f172a;
+            line-height: 1.4;
+        }
+
+        .options-container {
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+        }
+
+        .option-btn {
+            padding: 16px;
+            border: 1px solid #cbd5e1;
+            background: #f8fafc;
+            color: #334155;
+            border-radius: 8px;
+            font-size: 16px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            text-align: left;
+        }
+
+        .option-btn:hover {
+            border-color: #0ea5e9;
+            background: #f0f9ff;
+            color: #0284c7;
+        }
+
+        .next-btn {
+            width: 100%;
+            padding: 16px;
+            background: #0ea5e9;
+            color: white;
+            border: none;
+            border-radius: 8px;
+            font-weight: 600;
+            font-size: 16px;
+            cursor: pointer;
+            margin-top: 10px;
+            transition: background 0.2s;
+        }
+
+        .next-btn:hover { background: #0284c7; }
+
+        /* Explanation Alert Area */
+        #explanation-area {
+            display: none;
+            background-color: #fffbeb;
+            border-left: 4px solid #f59e0b;
+            padding: 20px;
+            border-radius: 0 8px 8px 0;
+            margin-bottom: 20px;
+        }
+
+        .explanation-title {
+            font-weight: 700;
+            color: #b45309;
+            margin-bottom: 8px;
+            font-size: 16px;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        #explanation-text {
+            color: #92400e;
+            line-height: 1.5;
+            font-size: 15px;
+            margin-bottom: 20px;
+        }
+
+        /* Result Area */
+        #result-area { display: none; }
+        
+        .result-icon {
+            font-size: 48px;
+            margin-bottom: 15px;
+            text-align: center;
+        }
+        
+        #result-title {
+            text-align: center;
+            margin-top: 0;
+            color: #0f172a;
+        }
+
+        #result-message {
+            text-align: center;
+            color: #475569;
+            margin-bottom: 30px;
+        }
+
+        .action-list {
+            background: #fef2f2;
+            color: #991b1b;
+            padding: 24px 24px 24px 44px;
+            border: 1px solid #fecaca;
+            border-radius: 8px;
+            margin-bottom: 30px;
+        }
+
+        .action-list li { margin-bottom: 12px; line-height: 1.5; }
+
+        /* Help Section */
+        #help-area {
+            text-align: center;
+            padding-top: 20px;
+            border-top: 1px solid #e2e8f0;
+            margin-bottom: 20px;
+        }
+
+        #help-area h3 {
+            color: #334155;
+            font-size: 16px;
+            margin-bottom: 15px;
+        }
+
+        .email-btn {
+            display: inline-block;
+            background: #f1f5f9;
+            color: #0f172a;
+            padding: 12px 24px;
+            border-radius: 8px;
+            font-weight: 600;
+            text-decoration: none;
+            border: 1px solid #cbd5e1;
+            transition: all 0.2s;
+        }
+
+        .email-btn:hover {
+            background: #e2e8f0;
+            border-color: #94a3b8;
+        }
+
+        .reset-link {
+            display: block;
+            text-align: center;
+            color: #64748b;
+            text-decoration: none;
+            font-size: 14px;
+            margin-top: 20px;
+            cursor: pointer;
+        }
+        .reset-link:hover { color: #0f172a; text-decoration: underline; }
+
+        @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
+        @keyframes slideUp { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }
+
+        @media (max-width: 600px) {
+            #intro-area h1 { font-size: 36px; }
+            .features { flex-direction: column; gap: 10px; }
+        }
+    </style>
+</head>
+<body>
+
+    <!-- SCREEN 1: INTRO (FinHub Style) -->
+    <div id="intro-area">
+        <div class="pre-title">DPDP RULE READINESS FOR MSMEs</div>
+        <h1>Your data went digital.<br>Did it go <span>governed?</span></h1>
+        <p class="subtitle">The Digital Personal Data Protection Act, 2023 is here. Take our free interactive assessment to check your MSME's legal compliance, get immediate context, and receive a secure action checklist.</p>
+        
+        <div class="features">
+            <span>✓ Free interactive assessment</span>
+            <span>✓ Keep the final gap checklist</span>
+        </div>
+        
+        <button class="primary-btn" onclick="startQuiz()">Assess your compliance →</button>
+    </div>
+
+    <!-- MAIN CARD (Quiz & Results) -->
+    <div id="main-card">
+        
+        <!-- SCREEN 2: QUIZ -->
+        <div id="quiz-area">
+            <div class="progress-container">
+                <div class="progress-bar" id="progress-bar"></div>
+            </div>
+            
+            <div class="question-box" id="question-text"></div>
+
+            <div class="options-container" id="options-area"></div>
+
+            <div id="explanation-area">
+                <div class="explanation-title">Compliance Alert</div>
+                <div id="explanation-text"></div>
+                <button class="next-btn" onclick="nextQuestion()">Acknowledge & Proceed</button>
+            </div>
+        </div>
+
+        <!-- SCREEN 3: RESULTS -->
+        <div id="result-area">
+            <div id="result-icon" class="result-icon"></div>
+            <h2 id="result-title"></h2>
+            <p id="result-message"></p>
+            
+            <div id="todo-list" style="display:none;">
+                <h3 style="color:#991b1b; margin-top:0;">What you need to do:</h3>
+                <ul class="action-list" id="action-items-container"></ul>
+            </div>
+
+            <!-- Contact & Help Section -->
+            <div id="help-area">
+                <h3>For more help contact:</h3>
+                <a href="mailto:anandrajmehta2205@gmail.com" class="email-btn">anandrajmehta2205@gmail.com</a>
+            </div>
+
+            <div class="reset-link" onclick="resetApp()">Start Over</div>
+        </div>
+        
+    </div>
+
+    <script>
+        window.onload = function() {
+            const questionsData = [
+                {
+                    q: "1. Do you provide a clear notice to users detailing the exact personal data being collected and the purpose for processing it before obtaining their consent?",
+                    exp: "As per Section 5(1) of the Act, every request for consent must be accompanied or preceded by a notice informing the user of the personal data being collected and the purpose for processing it.",
+                    action: "Draft and display a clear Data Privacy Notice before asking users for their personal data."
+                },
+                {
+                    q: "2. Is the user consent you collect free, specific, informed, and captured via a clear affirmative action (e.g., no pre-ticked checkboxes)?",
+                    exp: "As per Section 6(1) of the Act, consent must be free, specific, informed, unconditional, and unambiguous with a clear affirmative action. Pre-ticked boxes do not qualify as clear affirmative action.",
+                    action: "Update web forms to ensure all consent checkboxes are unchecked by default."
+                },
+                {
+                    q: "3. Is it just as easy for users to withdraw their consent as it was for them to give it?",
+                    exp: "As per Section 6(4) of the Act, users have the right to withdraw their consent at any time, and the ease of doing so must be comparable to how it was originally given.",
+                    action: "Build a mechanism (like a profile dashboard setting or quick-link) allowing users to easily withdraw their consent."
+                },
+                {
+                    q: "4. Do you implement reasonable security safeguards to protect personal data and prevent data breaches?",
+                    exp: "As per Section 8(5) of the Act, a Data Fiduciary must protect personal data in its possession by taking reasonable security safeguards to prevent a personal data breach.",
+                    action: "Implement necessary cybersecurity safeguards (encryption, access controls) to prevent data breaches."
+                },
+                {
+                    q: "5. Do you erase personal data when the user withdraws consent or as soon as the specified purpose is no longer being served?",
+                    exp: "As per Section 8(7)(a) of the Act, you must erase personal data upon the user withdrawing consent or as soon as it is reasonable to assume the specified purpose is no longer being served.",
+                    action: "Establish automated rules or manual protocols to delete user data when it is no longer needed or consent is withdrawn."
+                },
+                {
+                    q: "6. Have you published the business contact information of a person responsible for answering user questions and redressing grievances?",
+                    exp: "As per Section 8(9) of the Act, you must publish the business contact information of a person who is able to answer questions raised by the Data Principal about the processing of their data.",
+                    action: "Publish the business contact details of your data representative prominently on your website."
+                },
+                {
+                    q: "7. If you process data of individuals under 18, do you obtain verifiable consent from a parent/lawful guardian and refrain from targeted advertising?",
+                    exp: "As per Section 9(1) and 9(3) of the Act, you must obtain verifiable consent from a parent or lawful guardian before processing a child's data, and you must not undertake targeted advertising directed at children.",
+                    action: "Implement age-verification flows, obtain parental consent for minors, and disable targeted ads for users under 18."
+                }
+            ];
+
+            let currentIndex = 0;
+            let failureItems = [];
+
+            const introArea = document.getElementById("intro-area");
+            const mainCard = document.getElementById("main-card");
+            const quizArea = document.getElementById("quiz-area");
+            const resultArea = document.getElementById("result-area");
+            
+            const questionText = document.getElementById("question-text");
+            const optionsArea = document.getElementById("options-area");
+            const explanationArea = document.getElementById("explanation-area");
+            const explanationText = document.getElementById("explanation-text");
+            const progressBar = document.getElementById("progress-bar");
+
+            window.startQuiz = function() {
+                introArea.style.display = "none";
+                mainCard.style.display = "block";
+                quizArea.style.display = "block";
+                loadQuestion();
+            };
+
+            function loadQuestion() {
+                optionsArea.style.display = "flex";
+                explanationArea.style.display = "none";
+
+                const progress = (currentIndex / questionsData.length) * 100;
+                progressBar.style.width = progress + "%";
+
+                questionText.innerText = questionsData[currentIndex].q;
+                optionsArea.innerHTML = ""; 
+                
+                createOption("Yes", "yes");
+                createOption("No", "no");
+                
+                if(currentIndex === 6) {
+                    createOption("Not Applicable (We don't process children's data)", "na");
+                }
+            }
+
+            function createOption(label, value) {
+                const btn = document.createElement("button");
+                btn.className = "option-btn";
+                btn.innerText = label;
+                btn.onclick = () => handleAnswer(value);
+                optionsArea.appendChild(btn);
+            }
+
+            function handleAnswer(answer) {
+                if (answer === "no") {
+                    failureItems.push(questionsData[currentIndex].action);
+                    optionsArea.style.display = "none";
+                    explanationText.innerText = questionsData[currentIndex].exp;
+                    explanationArea.style.display = "block";
+                } else {
+                    nextQuestion();
+                }
+            }
+
+            window.nextQuestion = function() {
+                currentIndex++;
+                if (currentIndex < questionsData.length) {
+                    loadQuestion();
+                } else {
+                    showResults();
+                }
+            };
+
+            function showResults() {
+                quizArea.style.display = "none";
+                resultArea.style.display = "block";
+
+                const resultIcon = document.getElementById("result-icon");
+                const resultTitle = document.getElementById("result-title");
+                const resultMessage = document.getElementById("result-message");
+                const todoListBlock = document.getElementById("todo-list");
+                const actionContainer = document.getElementById("action-items-container");
+
+                actionContainer.innerHTML = "";
+
+                if (failureItems.length === 0) {
+                    resultIcon.innerHTML = "🛡️";
+                    resultTitle.innerText = "Audit Complete: Compliant";
+                    resultTitle.style.color = "#059669";
+                    resultMessage.innerText = "Your MSME appears to align with the core requirements of the DPDP Act. Ensure you maintain these standards continuously.";
+                    todoListBlock.style.display = "none";
+                } else {
+                    resultIcon.innerHTML = "⚠️";
+                    resultTitle.innerText = "Action Required";
+                    resultTitle.style.color = "#dc2626";
+                    resultMessage.innerText = "Your MSME is currently at risk of non-compliance. Please review the gap checklist below.";
+                    
+                    todoListBlock.style.display = "block";
+
+                    failureItems.forEach(item => {
+                        let li = document.createElement("li");
+                        li.innerText = item;
+                        actionContainer.appendChild(li);
+                    });
+                }
+            }
+
+            window.resetApp = function() {
+                currentIndex = 0;
+                failureItems = [];
+                mainCard.style.display = "none";
+                resultArea.style.display = "none";
+                introArea.style.display = "flex";
+                progressBar.style.width = "0%";
+            };
+        };
+    </script>
+</body>
+</html>
